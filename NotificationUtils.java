@@ -1,4 +1,4 @@
-package com.wssgs.notificationtest;
+package com.wssgs.servicetest;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -61,6 +61,34 @@ public class NotificationUtils extends ContextWrapper {
                 .setAutoCancel(true);
     }
     //目前默认AutoCancel,实现了可选支持PendingIntent
+    //增加了构建通知的功能，减少使用其他功能时的不便
+    public Notification buildNotification(String title, String content, PendingIntent...pi){
+        Notification notification;
+        if(pi.length>0){
+            if (Build.VERSION.SDK_INT>=26){
+                createNotificationChannel();
+                notification = getChannelNotification(title, content)
+                        .setContentIntent(pi[0])
+                        .build();
+            }else{
+                notification = getNotification_25(title, content)
+                        .setSmallIcon(android.R.drawable.stat_notify_more)
+                        .setContentIntent(pi[0])
+                        .build();
+            }
+        }
+        else{
+            if (Build.VERSION.SDK_INT>=26){
+                createNotificationChannel();
+                notification = getChannelNotification(title, content)
+                        .build();
+            }else{
+                notification = getNotification_25(title, content)
+                        .build();
+            }
+        }
+        return notification;
+    }
     //该方法适用于只发送通知，使用默认图标
     public void sendNotification(String title, String content, PendingIntent...pi){
         if(pi.length>0){
