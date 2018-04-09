@@ -127,8 +127,8 @@ public class NotificationUtils extends ContextWrapper {
         }
     }
     //构建进度条通知，适用于下载等情况；进度条采用默认图标和整数进度
-    public Notification buildProgressNotification(Activity target, String title, int progress) {
-        Intent intent = new Intent(this, target.getClass());
+    public Notification buildProgressNotification(Class target, String title, int progress) {
+        Intent intent = new Intent(this, target);
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
         if (Build.VERSION.SDK_INT >= 26) {
             createNotificationChannel();
